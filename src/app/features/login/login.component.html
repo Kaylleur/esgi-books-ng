@@ -1,0 +1,18 @@
+<form class="white-block" [formGroup]="form" (ngSubmit)="submitLogin()">
+  <h3>Connexion</h3>
+
+  <label class="row">
+    E-mail :
+    <input type="email" formControlName="email" autofocus />
+  </label>
+  <label class="row">
+    Password :
+    <input type="password" formControlName="password" />
+  </label>
+
+  @if (isInvalid()) {
+    <small style="color: red">Le couple login/mot de passe est invalide.</small>
+  }
+
+  <button type="submit" [disabled]="!form.valid">Se connecter</button>
+</form>

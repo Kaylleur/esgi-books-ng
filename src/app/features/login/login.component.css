@@ -1,0 +1,27 @@
+:host {
+  position: relative;
+  display: block;
+  height: 100vh;
+}
+
+form {
+  position: absolute;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+label {
+  display: block;
+}
+
+input {
+  display: block;
+  width: 100%;
+}

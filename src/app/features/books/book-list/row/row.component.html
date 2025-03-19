@@ -1,0 +1,10 @@
+<td>{{ book().title }}</td>
+<td>{{ book().author }}</td>
+<td>{{ book().publishDate | date }}</td>
+<td>{{ book().isbn }}</td>
+<td>{{ book().price | currency }}</td>
+<td>{{ book().quantity | number }}</td>
+<td>{{ book().price * book().quantity | currency }}</td>
+<td>
+  <button class="btn-icon" [routerLink]="[book().id]"><i>edit</i></button>
+</td>

@@ -1,0 +1,20 @@
+label input {
+  padding: 8px 20px;
+  display: block;
+  width: 100%;
+  border: 1px solid var(--bg-color);
+  border-radius: 5px;
+}
+
+.ng-invalid.ng-touched {
+  border-color: red;
+}
+
+label input ~ small {
+  display: none;
+}
+
+label input.ng-invalid.ng-touched ~ small {
+  display: block;
+  color: red;
+}

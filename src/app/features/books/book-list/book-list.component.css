@@ -1,0 +1,30 @@
+.loading-bar {
+  border: 1px #ccc solid;
+  background-color: white;
+
+  width: 500px;
+}
+
+.progress {
+  background-color: red;
+  height: 50px;
+}
+
+.has-books {
+  background-color: #ccc;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  text-align: left;
+}
+
+:host ::ng-deep th,
+:host ::ng-deep td {
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+}

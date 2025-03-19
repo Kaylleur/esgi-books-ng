@@ -1,0 +1,33 @@
+<div class="white-block row">
+  <h3 class="col">Liste des livres</h3>
+
+  <button class="btn" routerLink="new">
+    <i>add</i>
+    Créer un livre
+  </button>
+</div>
+<div class="white-block">
+  <table>
+    <tr>
+      <th>Title</th>
+      <th>Author</th>
+      <th>Publish Date</th>
+      <th>ISBN</th>
+      <th>Price</th>
+      <th>Quantity</th>
+      <th>Total price</th>
+      <th></th>
+    </tr>
+
+    @for (book of books(); track book.id) {
+      <app-row [book]="book"></app-row>
+    }
+
+    <tr>
+      <td colspan="4"></td>
+      <td>{{ stats()?.avgPrice | number }}</td>
+      <td>{{ stats()?.totalQuantity }}</td>
+      <td>{{ stats()?.totalPrice | currency }}</td>
+    </tr>
+  </table>
+</div>
