@@ -15,6 +15,7 @@ import { Book } from '../../../shared/interfaces/book.interface';
   imports: [ReactiveFormsModule],
   templateUrl: './book-detail.component.html',
   styleUrl: './book-detail.component.css',
+  standalone: true
 })
 export class BookDetailComponent implements OnInit {
   readonly #route = inject(ActivatedRoute);
@@ -22,9 +23,7 @@ export class BookDetailComponent implements OnInit {
   readonly #bookService = inject(BookService);
   readonly #fb = inject(FormBuilder);
 
-  readonly bookId = input(undefined, {
-    transform: (v) => Number(v),
-  });
+  readonly bookId = input(undefined);
 
   readonly isLoading = signal(false);
 
@@ -44,7 +43,7 @@ export class BookDetailComponent implements OnInit {
   });
 
   ngOnInit() {
-    if (this.bookId() !== undefined) {
+    if (this.bookId()) {
       this.#bookService.getBook(this.bookId()!).subscribe((book) =>
         this.form.patchValue({
           ...book,
@@ -72,11 +71,14 @@ export class BookDetailComponent implements OnInit {
 
     this.isLoading.set(true);
 
-    if (this.bookId() === undefined) {
+    console.log('this.bookId()');
+    console.log(this.bookId());
+
+    if (      this.bookId()) {
       this.#bookService
         .createBook(this.form.value as Book)
         .subscribe((book) => {
-          this.#router.navigate(['..', book.id], { relativeTo: this.#route });
+          this.#router.navigate(['..', book._id], { relativeTo: this.#route });
           this.isLoading.set(false);
         });
     } else {

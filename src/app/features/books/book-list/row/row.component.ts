@@ -8,6 +8,7 @@ import { Book } from '../../../../shared/interfaces/book.interface';
   imports: [CurrencyPipe, DatePipe, DecimalPipe, RouterLink],
   templateUrl: './row.component.html',
   styleUrl: './row.component.css',
+  standalone:true,
 })
 export class RowComponent {
   book = input.required<Book>();

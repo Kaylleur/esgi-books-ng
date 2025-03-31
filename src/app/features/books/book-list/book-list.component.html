@@ -19,7 +19,7 @@
       <th></th>
     </tr>
 
-    @for (book of books(); track book.id) {
+    @for (book of books(); track book._id) {
       <app-row [book]="book"></app-row>
     }
 

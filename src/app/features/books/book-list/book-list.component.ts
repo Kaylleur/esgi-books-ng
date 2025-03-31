@@ -16,6 +16,7 @@ import { BookService } from '../../../shared/services/book.service';
   templateUrl: './book-list.component.html',
   styleUrl: './book-list.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
 })
 export class BookListComponent {
   readonly #bookService = inject(BookService);
