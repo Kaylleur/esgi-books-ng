@@ -9,10 +9,11 @@ import {
 } from '@angular/forms';
 import { BookService } from '../../../shared/services/book.service';
 import { Book } from '../../../shared/interfaces/book.interface';
+import {NgForOf} from '@angular/common';
 
 @Component({
   selector: 'app-book-detail',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, NgForOf],
   templateUrl: './book-detail.component.html',
   styleUrl: './book-detail.component.css',
   standalone: true
@@ -24,6 +25,8 @@ export class BookDetailComponent implements OnInit {
   readonly #fb = inject(FormBuilder);
 
   readonly bookId = input(undefined);
+
+  reviews: any[] = [];
 
   readonly isLoading = signal(false);
 
@@ -41,14 +44,21 @@ export class BookDetailComponent implements OnInit {
     price: [null as number | null, [Validators.required, Validators.min(0)]],
     quantity: [null as number | null, [Validators.required, Validators.min(0)]],
   });
+  // message, rating
+  readonly reviewForm = this.#fb.group({
+    message: ['', [Validators.required]],
+    rating: [0, [Validators.required, Validators.min(1), Validators.max(5)]],
+  });
 
   ngOnInit() {
     if (this.bookId()) {
-      this.#bookService.getBook(this.bookId()!).subscribe((book) =>
-        this.form.patchValue({
-          ...book,
-          publishDate: new Date(book.publishDate).toISOString().split('T')[0],
-        }),
+      this.#bookService.getBook(this.bookId()!).subscribe((book) => {
+          this.form.patchValue({
+            ...book,
+            publishDate: new Date(book.publishDate).toISOString().split('T')[0],
+          });
+          this.reviews = book.reviews || [];
+        }
       );
     }
   }
@@ -71,9 +81,6 @@ export class BookDetailComponent implements OnInit {
 
     this.isLoading.set(true);
 
-    console.log('this.bookId()');
-    console.log(this.bookId());
-
     if (!this.bookId()) {
       this.#bookService
         .createBook(this.form.value as Book)
@@ -88,6 +95,29 @@ export class BookDetailComponent implements OnInit {
           this.isLoading.set(false);
         });
     }
+  }
+
+  addReview() {
+    if (!this.reviewForm.valid) {
+      this.reviewForm.markAllAsTouched();
+      return;
+    }
+
+    this.isLoading.set(true);
+
+    const { message, rating } = this.reviewForm.value;
+
+    this.#bookService
+      .addReviews({
+        bookId: this.bookId()!,
+        user: 'Anonymous',
+        message: message!,
+        rating: rating!,
+      })
+      .subscribe(() => {
+        this.isLoading.set(false);
+        this.reviewForm.reset();
+      });
   }
 }
 

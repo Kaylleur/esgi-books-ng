@@ -6,4 +6,5 @@ export interface Book {
   isbn: string;
   price: number;
   quantity: number;
+  reviews: { user: string; message: string; rating: number }[];
 }

@@ -55,3 +55,40 @@
     Enregistrer
   </button>
 </form>
+<div class="white-block">
+  <h3>Ajouter des reviews</h3>
+  <form [formGroup]="reviewForm" (ngSubmit)="addReview()">
+    <div class="row">
+      <label class="col">
+        Note
+        <input type="number" formControlName="rating" max="5" min="0" />
+        @if (reviewForm.controls.rating.hasError("min")) {
+          <small>La note doit être entre 1 et 5</small>
+        }
+      </label>
+      <label class="col">
+        Commentaire
+        <textarea formControlName="message"></textarea>
+      </label>
+    </div>
+    <button
+      type="submit"
+      class="row btn"
+      [class.is-loading]="isLoading()"
+      [disabled]="isLoading()"
+    >
+      Enregistrer
+    </button>
+  </form>
+</div>
+<div class="white-block">
+  <h3>Liste des reviews</h3>
+  <ul>
+    <li *ngFor="let review of reviews">
+      <div>
+        <span>Note: {{ review.rating }}</span>
+        <span>Commentaire: {{ review.message }}</span>
+      </div>
+    </li>
+  </ul>
+</div>

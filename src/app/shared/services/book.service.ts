@@ -25,4 +25,8 @@ export class BookService {
   updateBook(id: number, value: Omit<Book, 'id'>) {
     return this.#http.put<Book>('/api/books/' + id, value);
   }
+
+  addReviews(review: { bookId:string, user:string, message:string, rating:number }) {
+    return this.#http.post<Book>('/api/books/reviews', {...review});
+  }
 }
