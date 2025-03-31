@@ -19,7 +19,7 @@
       <th></th>
     </tr>
 
-    @for (book of books(); track book._id) {
+    @for (book of books$ | async; track book._id) {
       <app-row [book]="book"></app-row>
     }
 
@@ -30,4 +30,8 @@
       <td>{{ stats()?.totalPrice | currency }}</td>
     </tr>
   </table>
+  <div>
+    <button (click)="previousPage()">Précédent</button>
+    <button (click)="nextPage()">Suivant</button>
+  </div>
 </div>
