@@ -1,16 +1,17 @@
+
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../core/auth/auth.service';
-import {Router, RouterModule} from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-login',
-  imports: [ReactiveFormsModule, RouterModule],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.css',
+  selector: 'app-signup',
+  imports: [ReactiveFormsModule],
+  templateUrl: './signup.component.html',
   standalone: true,
+  styleUrl: './signup.component.css',
 })
-export default class LoginComponent {
+export default class SignupComponent {
   readonly #fb = inject(FormBuilder);
   readonly #authService = inject(AuthService);
   readonly #router = inject(Router);
@@ -19,11 +20,11 @@ export default class LoginComponent {
   readonly isInvalid = signal(false);
 
   readonly form = this.#fb.nonNullable.group({
-    email: ['admin@localhost', Validators.required],
-    password: ['admin', Validators.required],
+    email: ['', Validators.required],
+    password: ['', Validators.required],
   });
 
-  submitLogin() {
+  signUp() {
     if (!this.form.valid) {
       this.form.markAllAsTouched();
       return;
@@ -31,10 +32,10 @@ export default class LoginComponent {
 
     this.isLoading.set(true);
     const { password, email } = this.form.getRawValue();
-    this.#authService.login(email, password).subscribe({
+    this.#authService.signUp(email, password).subscribe({
       next: () => {
         this.isLoading.set(false);
-        this.#router.navigate(['/']);
+        this.#router.navigate(['/login']);
       },
       error: () => {
         this.isInvalid.set(true);

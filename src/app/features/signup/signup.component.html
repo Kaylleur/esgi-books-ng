@@ -1,0 +1,13 @@
+<form class="white-block" [formGroup]="form" (ngSubmit)="signUp()">
+  <h3>Connexion</h3>
+
+  <label class="row">
+    E-mail :
+    <input type="email" formControlName="email" autofocus />
+  </label>
+  <label class="row">
+    Password :
+    <input type="password" formControlName="password" />
+  </label>
+  <button type="submit" [disabled]="!form.valid">S'inscrire</button>
+</form>

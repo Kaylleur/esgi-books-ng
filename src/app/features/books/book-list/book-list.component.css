@@ -28,3 +28,8 @@ th {
   border: 1px solid #ccc;
   padding: 5px 10px;
 }
+
+.buttons {
+  display: flex;
+  gap: 1rem;
+}

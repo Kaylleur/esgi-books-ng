@@ -17,4 +17,11 @@ export class AuthService {
       })
       .pipe(tap((response) => (this.accessToken = response.accessToken)));
   }
+
+  signUp(email: string, password: string){
+    return this.#http.post('http://localhost:3000/api/users', {
+      email,
+      password
+    });
+  }
 }
