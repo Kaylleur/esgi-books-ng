@@ -74,7 +74,7 @@ export class BookDetailComponent implements OnInit {
     console.log('this.bookId()');
     console.log(this.bookId());
 
-    if (      this.bookId()) {
+    if (!this.bookId()) {
       this.#bookService
         .createBook(this.form.value as Book)
         .subscribe((book) => {
