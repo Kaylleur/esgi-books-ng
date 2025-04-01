@@ -1,0 +1,40 @@
+<div class="profile-container white-block">
+  <h2>Modifier mon profil</h2>
+
+  <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+    <div>
+      <label for="email">Email</label>
+      <input
+        type="email"
+        id="email"
+        formControlName="email"
+        placeholder="Entrez votre nouvel email"
+      />
+      <!-- Gestion de l’affichage d’erreurs si besoin -->
+      <div *ngIf="profileForm.controls['email'].touched && profileForm.controls['email'].invalid">
+        <p class="error" *ngIf="profileForm.controls['email'].errors?.['required']">L'email est requis.</p>
+        <p class="error" *ngIf="profileForm.controls['email'].errors?.['email']">Email invalide.</p>
+      </div>
+    </div>
+
+    <div>
+      <label for="password">Nouveau mot de passe</label>
+      <input
+        type="password"
+        id="password"
+        formControlName="password"
+        placeholder="Entrez votre nouveau mot de passe"
+      />
+      <!-- Affichage d'erreur si on veut imposer un minLength -->
+      <!--
+      <div *ngIf="profileForm.controls['password'].touched && profileForm.controls['password'].invalid">
+        <p class="error" *ngIf="profileForm.controls['password'].errors?.['minlength']">
+          Le mot de passe doit contenir au moins X caractères.
+        </p>
+      </div>
+      -->
+    </div>
+
+    <button type="submit" [disabled]="profileForm.invalid">Mettre à jour</button>
+  </form>
+</div>
