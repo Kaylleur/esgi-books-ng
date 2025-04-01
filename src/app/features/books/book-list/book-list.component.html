@@ -1,11 +1,29 @@
 <div class="white-block row">
   <h3 class="col">Liste des livres</h3>
-
   <button class="btn" routerLink="new">
     <i>add</i>
     Créer un livre
   </button>
 </div>
+
+<!-- Section FILTRES -->
+<div class="white-block row" style="gap: 1rem; align-items: center;">
+  <label class="col">
+    Filtrer par titre:
+    <input type="text" [(ngModel)]="searchTitle" (ngModelChange)="updateFilterParams()" />
+  </label>
+
+  <label class="col">
+    Tri:
+    <select [(ngModel)]="sortField" (change)="updateFilterParams()">
+      <option [value]="''">Sans tri</option>
+      <option value="title">Titre A-Z</option>
+      <option value="-title">Titre Z-A</option>
+      <!-- Ajouter d'autres champs de tri si besoin -->
+    </select>
+  </label>
+</div>
+
 <div class="white-block">
   <table>
     <tr>
@@ -19,6 +37,7 @@
       <th></th>
     </tr>
 
+    <!-- On utilise le pipe async pour lister les livres -->
     @for (book of books$ | async; track book._id) {
       <app-row [book]="book"></app-row>
     }
@@ -30,6 +49,7 @@
       <td>{{ stats()?.totalPrice | currency }}</td>
     </tr>
   </table>
+
   <div class="buttons">
     <button (click)="previousPage()">Précédent</button>
     <button (click)="nextPage()">Suivant</button>

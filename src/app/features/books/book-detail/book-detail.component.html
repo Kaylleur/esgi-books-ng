@@ -1,5 +1,5 @@
 <form class="white-block" [formGroup]="form" (ngSubmit)="submitForm()">
-  <h3>Ajouter un livre</h3>
+  <h3>Ajouter ou éditer un livre</h3>
 
   <div class="row">
     <label class="col">
@@ -16,15 +16,15 @@
     <label class="col">
       Date de publication
       <input type="date" formControlName="publishDate" />
-      @if (form.controls.publishDate.hasError("isPastInvalid")) {
+      @if (form.controls.publishDate.hasError('isPastInvalid')) {
         <small>La date de publication doit être dans le passé</small>
       }
     </label>
     <label class="col">
       Numéro ISBN
       <input type="text" formControlName="isbn" />
-      @if (form.controls.isbn.hasError("pattern")) {
-        <small>L'ISBN doit être de la form de "0-1234-5678-9"</small>
+      @if (form.controls.isbn.hasError('pattern')) {
+        <small>L'ISBN doit être de la forme "0-1234-5678-9"</small>
       }
     </label>
   </div>
@@ -33,16 +33,29 @@
     <label class="col">
       Prix
       <input type="number" step="0.01" formControlName="price" />
-      @if (form.controls.price.hasError("min")) {
+      @if (form.controls.price.hasError('min')) {
         <small>Le prix doit être positif</small>
       }
     </label>
     <label class="col">
       Quantité
       <input type="number" step="1" formControlName="quantity" />
-      @if (form.controls.quantity.hasError("min")) {
+      @if (form.controls.quantity.hasError('min')) {
         <small>La quantité doit être positive</small>
       }
+    </label>
+  </div>
+
+  <!-- Nouveau champ pour la catégorie -->
+  <div class="row">
+    <label class="col">
+      Catégorie
+      <select formControlName="category">
+        <option value="">-- Choisir une catégorie --</option>
+        <option *ngFor="let cat of categories" [value]="cat._id">
+          {{ cat.name }}
+        </option>
+      </select>
     </label>
   </div>
 
@@ -55,6 +68,8 @@
     Enregistrer
   </button>
 </form>
+
+<!-- Section Reviews (inchangé) -->
 <div class="white-block">
   <h3>Ajouter des reviews</h3>
   <form [formGroup]="reviewForm" (ngSubmit)="addReview()">
@@ -62,7 +77,7 @@
       <label class="col">
         Note
         <input type="number" formControlName="rating" max="5" min="0" />
-        @if (reviewForm.controls.rating.hasError("min")) {
+        @if (reviewForm.controls.rating.hasError('min')) {
           <small>La note doit être entre 1 et 5</small>
         }
       </label>
@@ -81,6 +96,7 @@
     </button>
   </form>
 </div>
+
 <div class="white-block">
   <h3>Liste des reviews</h3>
   <ul>

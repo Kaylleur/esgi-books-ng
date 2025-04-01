@@ -6,13 +6,13 @@ import {Book} from '../interfaces/book.interface';
 export class BookService {
   readonly #http = inject(HttpClient);
 
-  getBooks(limit = 10, skip = 0) {
-    return this.#http.get<Book[]>('/api/books', {
-      params: {
-        skip, limit
-      }
-    });
+  getBooks(limit: number, skip: number, title?: string, sort?: string) {
+    const params: any = { limit, skip };
+    if (title) params.title = title;
+    if (sort) params.sort = sort;
+    return this.#http.get<Book[]>('/api/books', { params });
   }
+
 
   getBook(id: number) {
     return this.#http.get<Book>('/api/books/' + id);

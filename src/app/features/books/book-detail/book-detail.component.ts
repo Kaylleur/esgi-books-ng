@@ -9,7 +9,8 @@ import {
 } from '@angular/forms';
 import { BookService } from '../../../shared/services/book.service';
 import { Book } from '../../../shared/interfaces/book.interface';
-import {NgForOf} from '@angular/common';
+import { NgForOf } from '@angular/common';
+import { CategoryService, Category } from '../../../shared/services/category.service'; // <-- import du service
 
 @Component({
   selector: 'app-book-detail',
@@ -23,13 +24,18 @@ export class BookDetailComponent implements OnInit {
   readonly #router = inject(Router);
   readonly #bookService = inject(BookService);
   readonly #fb = inject(FormBuilder);
+  // Nouvel inject pour récupérer les catégories
+  readonly #categoryService = inject(CategoryService);
 
   readonly bookId = input(undefined);
 
   reviews: any[] = [];
+  isLoading = signal(false);
 
-  readonly isLoading = signal(false);
+  // Liste qu'on va remplir au ngOnInit
+  categories: Category[] = [];
 
+  // On ajoute un champ category
   readonly form = this.#fb.group({
     title: ['', [Validators.required]],
     author: ['', [Validators.required]],
@@ -43,23 +49,37 @@ export class BookDetailComponent implements OnInit {
     ],
     price: [null as number | null, [Validators.required, Validators.min(0)]],
     quantity: [null as number | null, [Validators.required, Validators.min(0)]],
+    // Nouveau champ category
+    category: [''], // <-- si on veut le rendre obligatoire: [Validators.required]
   });
-  // message, rating
+
+  // Form pour les reviews (inchangé)
   readonly reviewForm = this.#fb.group({
     message: ['', [Validators.required]],
     rating: [0, [Validators.required, Validators.min(1), Validators.max(5)]],
   });
 
   ngOnInit() {
+    // Charger la liste des catégories disponibles
+    this.#categoryService.getCategories().subscribe({
+      next: (cats) => {
+        this.categories = cats;
+      },
+      error: (err) => console.error('Erreur lors du fetch categories', err),
+    });
+
+    // Si on édite un livre existant
     if (this.bookId()) {
       this.#bookService.getBook(this.bookId()!).subscribe((book) => {
-          this.form.patchValue({
-            ...book,
-            publishDate: new Date(book.publishDate).toISOString().split('T')[0],
-          });
-          this.reviews = book.reviews || [];
-        }
-      );
+        // On patch le formulaire
+        this.form.patchValue({
+          ...book,
+          publishDate: new Date(book.publishDate).toISOString().split('T')[0],
+          // Si book.category est un objet, vous voudrez mettre book.category._id
+          // Si c'est directement l'ID, on met book.category
+        });
+        this.reviews = book.reviews || [];
+      });
     }
   }
 
@@ -82,6 +102,7 @@ export class BookDetailComponent implements OnInit {
     this.isLoading.set(true);
 
     if (!this.bookId()) {
+      // Création
       this.#bookService
         .createBook(this.form.value as Book)
         .subscribe((book) => {
@@ -89,6 +110,7 @@ export class BookDetailComponent implements OnInit {
           this.isLoading.set(false);
         });
     } else {
+      // Mise à jour
       this.#bookService
         .updateBook(this.bookId()!, this.form.value as Book)
         .subscribe(() => {
