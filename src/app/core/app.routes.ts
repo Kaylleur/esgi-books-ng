@@ -22,6 +22,10 @@ export const routes: Routes = [
         loadChildren: () =>
           import('../features/books/books.routes').then((m) => m.routes),
       },
+      {
+        path: 'profile',
+        loadComponent: () => import('../features/profile/profile.component'),
+      },
     ],
   },
   {

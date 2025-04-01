@@ -23,8 +23,6 @@ import {FormsModule} from '@angular/forms';
     RowComponent,
     RouterLink,
     AsyncPipe,
-    NgIf,
-    NgForOf,
     FormsModule,
     FormsModule,
   ],
