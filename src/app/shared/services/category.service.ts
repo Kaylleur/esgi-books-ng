@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface Category {
-  _id: string;
+  id: string;
   name: string;
 }
 
@@ -11,7 +11,7 @@ export interface Category {
   providedIn: 'root'
 })
 export class CategoryService {
-  private readonly baseUrl = 'http://localhost:3000/api/categories';
+  private readonly baseUrl = '/api/categories';
   // Adaptez à votre vrai endpoint
 
   constructor(private http: HttpClient) {}

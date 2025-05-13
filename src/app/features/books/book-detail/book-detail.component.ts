@@ -49,8 +49,7 @@ export class BookDetailComponent implements OnInit {
     ],
     price: [null as number | null, [Validators.required, Validators.min(0)]],
     quantity: [null as number | null, [Validators.required, Validators.min(0)]],
-    // Nouveau champ category
-    category: [''], // <-- si on veut le rendre obligatoire: [Validators.required]
+    category: [''],
   });
 
   // Form pour les reviews (inchangé)
@@ -75,7 +74,7 @@ export class BookDetailComponent implements OnInit {
         this.form.patchValue({
           ...book,
           publishDate: new Date(book.publishDate).toISOString().split('T')[0],
-          // Si book.category est un objet, vous voudrez mettre book.category._id
+          // Si book.category est un objet, vous voudrez mettre book.category.id
           // Si c'est directement l'ID, on met book.category
         });
         this.reviews = book.reviews || [];
@@ -106,7 +105,7 @@ export class BookDetailComponent implements OnInit {
       this.#bookService
         .createBook(this.form.value as Book)
         .subscribe((book) => {
-          this.#router.navigate(['..', book._id], { relativeTo: this.#route });
+          this.#router.navigate(['..', book.id], { relativeTo: this.#route });
           this.isLoading.set(false);
         });
     } else {

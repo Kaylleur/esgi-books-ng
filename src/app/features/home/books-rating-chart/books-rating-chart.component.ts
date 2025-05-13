@@ -14,7 +14,7 @@ import {HttpClient} from '@angular/common/http';
   standalone: true,
   template: `
     <div style="width: 600px;">
-      <canvas #barCanvas width="600" height="400"></canvas>
+      <canvas #barCanvas width="1024" height="400"></canvas>
     </div>
   `
 })
@@ -23,13 +23,13 @@ export class BooksRatingChartComponent implements OnInit, OnChanges, AfterViewIn
 
   constructor(private http: HttpClient) {}
   // On déclare un @Input() data pour recevoir vos objets
-   data: Array<{ _id: {bookId:string, title:string}; avgRating: number; reviewCount: number }> = [];
+   data: Array<{ id: {bookId:string, title:string}; avgRating: number; reviewCount: number }> = [];
   ngOnInit(): void {
     this.fetchBooksData();
   }
   fetchBooksData(): void {
     // Remplacez l'URL par votre route réelle
-    this.http.get<Array<{ _id:  {bookId:string, title:string}; avgRating: number; reviewCount: number }>>('http://localhost:3000/api/books/best-reviews')
+    this.http.get<Array<{ id:  {bookId:string, title:string}; avgRating: number; reviewCount: number }>>('/api/books/best-reviews')
       .subscribe({
         next: (data) => {
           this.data = data;
@@ -78,7 +78,7 @@ export class BooksRatingChartComponent implements OnInit, OnChanges, AfterViewIn
     const margin = 40;
     const barWidth = 40;
     const barSpacing = 30;
-    const bottomAxisY = height - margin;
+    const bottomAxisY = height - margin-40;
 
     // Calcul de l'espace total que prendront les barres
     const totalBarsWidth = (barWidth + barSpacing) * this.data.length;
@@ -102,10 +102,16 @@ export class BooksRatingChartComponent implements OnInit, OnChanges, AfterViewIn
       ctx.fillStyle = '#4973AE'; // couleur "par défaut"
       ctx.fillRect(barX, barY, barWidth, barHeight);
 
-      // Label X : le titre (propriété _id)
+      // Label X : le titre (propriété id)
+      ctx.save();
       ctx.fillStyle = '#000000';
-      ctx.textAlign = 'center';
-      ctx.fillText(item._id.title, barX + barWidth / 2, bottomAxisY + 15);
+      ctx.textAlign = 'right'; // 'right' ou 'center' selon ton angle
+      ctx.translate(barX + barWidth / 2, bottomAxisY + 15);
+      // ctx.rotate(-Math.PI / 4); // -45° (en radians) = lisible et compact
+      //-30° pour le texte
+      ctx.rotate(-Math.PI / 6); // -30° (en radians) = lisible et compact
+      ctx.fillText(item.id.title, 0, 0);
+      ctx.restore();
 
       // Afficher la valeur de avgRating au-dessus de la barre
       ctx.fillText(item.avgRating.toString(), barX + barWidth / 2, barY - 5);

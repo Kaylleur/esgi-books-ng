@@ -11,7 +11,7 @@ export class AuthService {
 
   login(email: string, password: string) {
     return this.#http
-      .post<LoginResponse>('http://localhost:3000/api/auth/login', {
+      .post<LoginResponse>('/api/auth/login', {
         email,
         password,
       })
@@ -19,9 +19,18 @@ export class AuthService {
   }
 
   signUp(email: string, password: string){
-    return this.#http.post('http://localhost:3000/api/users', {
+    return this.#http.post('/api/users', {
       email,
       password
     });
+  }
+
+  refresh$() {
+    return this.#http.get<LoginResponse>('api/auth/refresh')
+      .pipe(tap((response) => (this.accessToken = response.accessToken)));
+  }
+
+  clearToken() {
+    this.accessToken = undefined;
   }
 }

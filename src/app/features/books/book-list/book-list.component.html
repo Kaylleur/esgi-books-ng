@@ -38,7 +38,7 @@
     </tr>
 
     <!-- On utilise le pipe async pour lister les livres -->
-    @for (book of books$ | async; track book._id) {
+    @for (book of books$ | async; track book.id) {
       <app-row [book]="book"></app-row>
     }
 

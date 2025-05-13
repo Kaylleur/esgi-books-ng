@@ -7,14 +7,14 @@ import { HttpClient } from '@angular/common/http';
   standalone: true,
   template: `
     <div style="width: 600px;">
-      <canvas #barCanvas width="600" height="400"></canvas>
+      <canvas #barCanvas width="1024" height="400"></canvas>
     </div>
   `
 })
 export class BooksBarChartComponent implements OnInit, AfterViewInit {
   @ViewChild('barCanvas', { static: true }) barCanvas!: ElementRef<HTMLCanvasElement>;
 
-  booksData: Array<{ _id: string; averagePrice: number; totalBooks: number }> = [];
+  booksData: Array<{ id: string; averagePrice: number; totalBooks: number }> = [];
 
   constructor(private http: HttpClient) {}
 
@@ -29,7 +29,7 @@ export class BooksBarChartComponent implements OnInit, AfterViewInit {
 
   fetchBooksData(): void {
     // Remplacez l'URL par votre route réelle
-    this.http.get<Array<{ _id: string; averagePrice: number; totalBooks: number }>>('http://localhost:3000/api/books/average-price')
+    this.http.get<Array<{ id: string; averagePrice: number; totalBooks: number }>>('/api/books/average-price')
       .subscribe({
         next: (data) => {
           this.booksData = data;
@@ -68,7 +68,9 @@ export class BooksBarChartComponent implements OnInit, AfterViewInit {
     const margin = 40;
     const barWidth = 40;
     const barSpacing = 30; // espace entre les barres
-    const bottomAxisY = height - margin;
+    const bottomMargin = 80;
+    const bottomAxisY = height - bottomMargin;
+
 
     // On calcule l'espace total que prendront les barres
     // (barWidth + barSpacing) * nombre d'auteurs - (barSpacing pour la dernière barre, souvent non nécessaire)
@@ -99,12 +101,21 @@ export class BooksBarChartComponent implements OnInit, AfterViewInit {
       ctx.fillRect(barX, barY, barWidth, barHeight);
 
       // Auteur en dessous de la barre (label X)
+      ctx.save();
       ctx.fillStyle = '#000000';
-      ctx.textAlign = 'center';
-      ctx.fillText(item._id, barX + barWidth / 2, bottomAxisY + 15);
+      ctx.textAlign = 'right'; // 'right' ou 'center' selon ton angle
+      ctx.translate(barX + barWidth / 2, bottomAxisY + 15);
+      // ctx.rotate(-Math.PI / 4); // -45° (en radians) = lisible et compact
+      //-30° pour le texte
+      ctx.rotate(-Math.PI / 6); // -30° (en radians) = lisible et compact
+      ctx.fillText(item.id, 0, 0);
+      ctx.restore();
+
 
       // Valeur (averagePrice) au dessus de la barre
-      ctx.fillText((item.averagePrice||0).toString(), barX + barWidth / 2, barY - 5);
+      const avgPrice = +item.averagePrice || 0;
+      ctx.fillText((avgPrice.toFixed(2)).toString(), barX + barWidth / 2, barY - 5);
     });
   }
 }
+
